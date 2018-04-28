@@ -15,7 +15,7 @@
             "email": "abouba181@gmail.com"
         }
     ],
-    "minimum-stability": "beta",
+    "minimum-stability": "stable",
     "autoload": {
         "psr-4": {
             "Oza\\UserImagesManager\\": "src/"
