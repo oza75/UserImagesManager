@@ -4,7 +4,9 @@
     "type": "library",
     "keywords": ["laravel", "Users", "Images"],
     "require": {
-        "php": ">=7.0",
+        "php": ">=7.0"
+    },
+    "require-dev": {
         "laravel/laravel": "5.6"
     },
     "license": "MIT",
