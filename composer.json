@@ -8,6 +8,7 @@
         "laravel/laravel": "5.6"
     },
     "license": "MIT",
+    "homepage": "https://github.com/oza75/UserImagesManager",
     "authors": [
         {
             "name": "Aboubacar Ouattara",
