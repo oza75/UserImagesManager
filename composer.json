@@ -1,0 +1,30 @@
+{
+    "name": "oza/user-images-manager",
+    "description": "A package to help you manage your users images such as avatars or covers",
+    "type": "library",
+    "keywords": ["laravel", "Users", "Images"],
+    "require": {
+        "php": ">=7.0",
+        "laravel/laravel": "5.6"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Aboubacar Ouattara",
+            "email": "abouba181@gmail.com"
+        }
+    ],
+    "minimum-stability": "beta",
+    "autoload": {
+        "psr-4": {
+            "Oza\\UserImagesManager\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Oza\\UserImagesManager\\Providers\\ManagerServiceProvider"
+            ]
+        }
+    }
+}
