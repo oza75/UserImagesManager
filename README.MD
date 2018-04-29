@@ -183,7 +183,7 @@
            $profile()->coverManager(); 
          ```
     
-    - ##  Available Model for each Manager
+    - ##  Available Methods for each Manager
         - ### Current 
         Return a current image for a Manager 
         ```php
@@ -209,9 +209,9 @@
           $profile->avatarManager()->all(); // return an array
         ```
         - ### Others 
-        Return All images for a Manager 
+        Return all images that have been used before for a Manager 
         ```php
-          $profile->avatarManager()->all(); // return an array
+          $profile->avatarManager()->others(); // return an array
         ```
         - ### Set 
         Put an image to database: it take the image link (string) 
@@ -220,6 +220,9 @@
         ```
         - ### Set by Id
         Put an image that has already been used as an avatar, cover, etc.
+        This can be useful if for example when the user wants to change 
+        his avatar he is shown all the images that had chosen 
+        it before and he has the choice to put an old image or a new image
         ```php
           /*-------------------------------------------------------
           |  First image
@@ -260,7 +263,7 @@
           $profile->avatarManager()->setRandom(); // return the current avatar
          ```
          
-         - All Methods are in MethodsInterface
+         -## All Methods are in MethodsInterface
          ```php
          <?php
    
@@ -339,7 +342,7 @@
          }
          ```
          
-    - Add a Custom Manager 
+    - ## Add a Custom Manager 
     Just create a class that extends to Manager Class and implements MethodsInterface
     
     ```php
