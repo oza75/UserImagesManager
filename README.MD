@@ -1,9 +1,9 @@
-#Laravel Package that help your to manage your users images such as avatars and covers
+#  Laravel Package that help your to manage your users images such as avatars and covers
 
-- ##Requirements 
+- ##  Requirements 
     - PHP 7.0 or higher
     - Laravel 5.6.x or higher
-- ##Installation
+- ##  Installation
   
   Just run a : 
   
@@ -11,7 +11,7 @@
   
 - With Laravel 5.6.x, thanks to Laravel discovering system
  the ServiceProvider is automatically added to your Providers 
-- ##Architecture
+- ##  Architecture
  The data is represented in an array containing two fields.
   A "current" field that contains the currently used image
   and another "other" field that contains all the images
@@ -41,7 +41,7 @@
     ]
   
   ```     
-- ##How to Use
+- ##  How to Use
     - Just Add the `UsersImagesManager` trait to your Profile Model.
     ```php
     <?php
@@ -136,7 +136,7 @@
     ```
     - After theses steps, you can call `AvatarManager or CoverManager etc...`.
     
-        - :danger: The Profile Model must be a user's profile not only The Model Class,
+        - :bangbang: :warning: :boom: The Profile Model must be a user's profile not only The Model Class,
         that means it must have a user_id fields etc...
         
     **Eg:**    
@@ -169,33 +169,33 @@
      }
     }
     ``` 
-    - ##Available Manager 
-        - ###Avatar Manager
+    - ##  Available Manager 
+        - ### Avatar Manager
         Return an Instance of Avatar Class
         
         ```php 
            $profile()->avatarManager(); 
         ```
-        - ###Cover Manager
+        - ### Cover Manager
         Return an Instance of Cover Class
                 
          ```php 
            $profile()->coverManager(); 
          ```
     
-    - ##Available Model for each Manager
-        - ###Current 
+    - ##  Available Model for each Manager
+        - ### Current 
         Return a current image for a Manager 
         ```php
           $profile->avatarManager()->current(); // return a string
         ```
-        - ###Current In Array format 
+        - ### Current In Array format 
         Return an array for current image
         ```php
           $profile->avatarManager()->currentInArray(); // return an array
           
         ```
-        **Ouput:**
+        **Output:**
         ```
         array:3 [
           "id" => "9da1cdb0-0ef6-4558-aa9c-116950e445d4"
@@ -203,22 +203,22 @@
           "set_at" => "2018-04-29"
         ]
         ```
-        - ###All 
+        - ### All 
         Return All images for a Manager 
         ```php
           $profile->avatarManager()->all(); // return an array
         ```
-        - ###Others 
+        - ### Others 
         Return All images for a Manager 
         ```php
           $profile->avatarManager()->all(); // return an array
         ```
-        - ###Set 
+        - ### Set 
         Put an image to database: it take the image link (string) 
         ```php
           $profile->avatarManager()->set("http://lorempicsum.com/random/100"); // return the current avatar
         ```
-        - ###Set by Id
+        - ### Set by Id
         Put an image that has already been used as an avatar, cover, etc.
         ```php
           /*-------------------------------------------------------
@@ -254,7 +254,7 @@
           
           $profile->avatarManager()->setById($id); // return the current avatar
         ```
-         - ###Set A Random Image
+         - ### Set A Random Image
          You can use it to set a default Image when user is registered. 
          ```php
           $profile->avatarManager()->setRandom(); // return the current avatar
