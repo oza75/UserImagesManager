@@ -8,72 +8,27 @@
 
 namespace Oza\UserImagesManager;
 
+use Oza\UserImagesManager\Interfaces\MethodsInterface;
+use Oza\UserImagesManager\Traits\Methods;
 
-use Oza\UserImagesManager\Interfaces\AvatarInterface;
-
-class Avatar extends Manager implements AvatarInterface
+class Avatar extends Manager implements MethodsInterface
 {
-    /**
-     * Get the current avatar object
-     **/
-    public function getAvatar()
-    {
-        return !empty($this->all) ?
-            $this->all['current'] :
-            $this->getAvatars()->current();
-    }
+
+    use Methods;
+
+    private $field;
+    private $defaultSize;
 
     /**
-     * Get all avatars
+     * Avatar constructor
      *
-     * @return Avatar
      */
-    public function getAvatars() : Avatar
+    public function __construct()
     {
-        $avatars = (array)json_decode($this->profile->avatars);
-        $avatars = !is_null($avatars) && !empty($avatars) ? $avatars : [];
-        $this->all = $avatars;
-        return $this;
+        parent::__construct();
+        $this->field = config("profile.avatars_field") ?? 'avatars';
+        $this->defaultSize = config("profile.default_avatar_size") ?? '400x400';
+
     }
 
-    /**
-     * set a avatar to a profile
-     *
-     * @param string $src
-     * @return string|null
-     * @throws Exceptions\ProfileModelNotDefined
-     */
-    public function setAvatar(string $src)
-    {
-        $avatars = !empty($this->all) ? $this->all : $this->getAvatars()->all;
-        if (empty($avatars)) $this->all = $avatars = $this->getDefaultImageArray($src);
-        else if ($this->AlreadyUsed($src)) $this->setAvatarById($this->findIdBySrc($src));
-        else $this->all = $avatars = $this->changeCurrent($avatars, $this->newItem($src));
-
-        $this->pushToDb();
-        return $this->getAvatar();
-    }
-
-    /**
-     * Push avatars to Database
-     *
-     * @throws Exceptions\ProfileModelNotDefined
-     */
-    private function pushToDb() {
-        $this->profile->avatars = json_encode($this->all);
-        parent::save();
-    }
-
-
-    /**
-     * Set Avatar by an id
-     *
-     * @param string $id
-     * @return mixed
-     */
-    public function setAvatarById(string $id)
-    {
-        $item = (array)array_first((array)$this->findInArray($this->others(), $id, 'id'));
-        $this->all['current'] = $item;
-    }
 }

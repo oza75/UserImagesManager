@@ -12,26 +12,27 @@ namespace Oza\UserImagesManager\Traits;
 use Oza\UserImagesManager\Avatar;
 use Oza\UserImagesManager\Cover;
 use Oza\UserImagesManager\Exceptions\NotAUserProfileModel;
+use Oza\UserImagesManager\Manager;
 
 trait UserImagesManager
 {
     /**
-     * @return Avatar
+     * @return Manager
      * @throws NotAUserProfileModel
      */
-    public function avatarManager() : Avatar {
+    public function avatarManager() : Manager
+    {
         $instance = new Avatar();
-        $instance->setProfile($this);
-        return $instance;
+        return $instance->setProfile($this);
     }
 
     /**
-     * @return Cover
+     * @return Manager
      * @throws NotAUserProfileModel
      */
-    public function coverManager () : Cover {
+    public function coverManager () : Manager
+    {
         $instance = new Cover();
-        $instance->setProfile($this);
-        return $instance;
+        return $instance->setProfile($this);
     }
 }

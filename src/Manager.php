@@ -27,10 +27,12 @@ class Manager implements ManagerInterface
     protected $all = [];
     protected $current = [];
     protected $toParse = null;
+    protected $defaultApiAddress;
 
     public function __construct()
     {
         $this->user_id_field = config('profile.user_id_field');
+        $this->defaultApiAddress = config('profile.default_images_domain');
     }
 
     /**
@@ -40,9 +42,10 @@ class Manager implements ManagerInterface
      */
     public function getDefaultImageArray(string $src): array
     {
+        $img = $this->newItem($src);
         return [
-            'current' => $this->newItem($src),
-            'others' => [$this->newItem($src)]
+            'current' => $img,
+            'others' => []
         ];
     }
 
@@ -144,9 +147,40 @@ class Manager implements ManagerInterface
         if (is_null($this->profile)) throw new ProfileModelNotDefined();
         else return true;
     }
+
+    /**
+     * @return array
+     */
     public function others(): array
     {
-        return $this->all['others'] ?? [];
+        $others = $this->all['others'] ?? [];
+
+        if (empty($others)) return $others;
+        $current = (array)$this->all['current'];
+        $current = $current['id'];
+        $others = array_filter($others, function ($item) use ($current) {
+            $item = (array)$item;
+            return $item["id"] !== $current;
+        });
+
+        return $others;
+    }
+
+    public function removeItem(string $id) : void
+    {
+       $data = $this->all;
+       if($data['current']->id === $id) {
+           for($i = count($data['others']); $i > 0; $i--) {
+              $others = (array)$data['others'];
+              if ($others[$i - 1]->id !== $id) {
+                  $data['current'] = $others[$i - 1];
+              }
+           }
+       }
+       $data['others'] = array_filter($data['others'], function($item) use ($id) {
+           return $item->id !== $id;
+       });
+       $this->all = $data;
     }
 
     /**
@@ -186,8 +220,7 @@ class Manager implements ManagerInterface
     {
         $current = $data['current'];
         $data['current'] = $newItem;
-        $data['others'] = $this->pushInArray($data['others'],(array) $current);
-
+        $data['others'] = $this->pushInArray($data['others'], (array)$current);
         return $data;
     }
 
