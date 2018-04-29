@@ -263,7 +263,7 @@
           $profile->avatarManager()->setRandom(); // return the current avatar
          ```
          
-         -## All Methods are in MethodsInterface
+         - ## All Methods are in MethodsInterface
          ```php
          <?php
    
