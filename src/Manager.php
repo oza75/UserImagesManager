@@ -1,15 +1,12 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: aboubacar
- * Date: 18/04/18
- * Time: 19:33
+ * @author Aboubacar Ouattara <abouba181@gmail.com>
+ * @license MIT
  */
 
 namespace Oza\UserImagesManager;
 
 
-use App\Profile;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
@@ -63,6 +60,22 @@ class Manager implements ManagerInterface
             $item = (array)$item;
             return $item[$field] === $needed;
         }));
+    }
+
+    /**
+     * Retrieve an Item from collection `All`
+     *
+     * @param string $field
+     * @param $needed
+     * @return array|null
+     */
+
+    public function fetchByField(string $field, $needed): ?array
+    {
+        if (((array)$this->all['current'])[$field] === $needed) return (array)$this->all['current'];
+        $item = $this->findInArray($this->others(), $needed, $field);
+        if (!empty($item)) return (array)$item[0];
+        return null;
     }
 
     /**
@@ -166,21 +179,21 @@ class Manager implements ManagerInterface
         return $others;
     }
 
-    public function removeItem(string $id) : void
+    public function removeItem(string $id): void
     {
-       $data = $this->all;
-       if($data['current']->id === $id) {
-           for($i = count($data['others']); $i > 0; $i--) {
-              $others = (array)$data['others'];
-              if ($others[$i - 1]->id !== $id) {
-                  $data['current'] = $others[$i - 1];
-              }
-           }
-       }
-       $data['others'] = array_filter($data['others'], function($item) use ($id) {
-           return $item->id !== $id;
-       });
-       $this->all = $data;
+        $data = $this->all;
+        if ($data['current']->id === $id) {
+            for ($i = count($data['others']); $i > 0; $i--) {
+                $others = (array)$data['others'];
+                if ($others[$i - 1]->id !== $id) {
+                    $data['current'] = $others[$i - 1];
+                }
+            }
+        }
+        $data['others'] = array_filter($data['others'], function ($item) use ($id) {
+            return $item->id !== $id;
+        });
+        $this->all = $data;
     }
 
     /**

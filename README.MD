@@ -208,6 +208,16 @@
         ```php
           $profile->avatarManager()->all(); // return an array
         ```
+        - ### Get By Id
+        Return an image with a specific id
+        ```php
+          $profile->avatarManager()->getById("cc5088ab-0a68-4459-890d-f949cfed235e"); // return an array
+         ``` 
+        - ### Get By source
+        Return a collection of all images that have a specific source
+        ```php
+          $profile->avatarManager()->getBySrc("https://source.unsplash.com/random/400x400"); // return an array
+        ```
         - ### Others 
         Return all images that have been used before for a Manager 
         ```php
@@ -262,84 +272,121 @@
          ```php
           $profile->avatarManager()->setRandom(); // return the current avatar
          ```
+         - ### Change or Update
+         Changes the value of the collection whose id is passed in the parameters by the remplacement value passed.
+         It takes a third parameter which is the field of ​​interest. 
+         if no value is specified then if the replacement value is an array,
+          the entire collection will be replaced, else if the replacement value is a string,
+           only the src attribute will be changed 
+           otherwise if it is not a string , nor an array, an exception will be thrown 
+         
+         ```php
+          $profile->avatarManager()->change('cc5088ab-0a68-4459-890d-f949cfed235e', 'https://source.unsplash.com/random/400x400'); // change the image src
+          $profile->avatarManager()->change('cc5088ab-0a68-4459-890d-f949cfed235e', now()->addDay(2)->format('Y-m-d'), 'set_at'); // change set_at value
+          $profile->avatarManager()->change('cc5088ab-0a68-4459-890d-f949cfed235e', 'yes', 'archived'); // add a new field to collection
+         ```
          
          - ## All Methods are in MethodsInterface
          ```php
-         <?php
-   
-         namespace Oza\UserImagesManager\Interfaces;
-         
-         
-         interface MethodsInterface
-         {
-             /**
-              * Get the current  object
-              *
-              * @return mixed
-              */
-             public function current() : string;
-         
-             /**
-              * @return array
-              */
-             public function currentInArray(): array;
-         
-             /**
-              * Get all
-              *
-              * @return array
-              */
-             public function all(): array;
-         
-             /**
-              * Get Others
-              *
-              * @return array
-              *
-              */
-             public function others(): array;
-         
-             /**
-              *  Fill All Array and return an instance
-              *
-              * @return MethodsInterface
-              */
-             public function getAll(): MethodsInterface;
-         
-             /**
-              * set to profile
-              *
-              * @param string $src
-              * @return string|null
-              */
-             public function set(string $src): string;
-         
-             /**
-              * Set Random image
-              *
-              * @return string
-              */
-             public function setRandom() : string;
-             /**
-              * Set by an id
-              *
-              * @param string $id
-              * @return mixed
-              */
-             public function setById(string $id): ?string;
-         
-             /**
-              * @param string $id
-              * @return bool
-              */
-             public function remove(string $id) : bool;
-         
-             /**
-              * @return bool
-              */
-                   
-             public function removeAll() : bool;
-         }
+      <?php
+      /**
+       * @author Aboubacar Ouattara <abouba181@gmail.com>
+       * @license MIT   
+       */
+      
+      namespace Oza\UserImagesManager\Interfaces;
+      
+      
+      interface MethodsInterface
+      {
+          /**
+           * Get the current  object
+           *
+           * @return mixed
+           */
+          public function current(): string;
+      
+          /**
+           * @return array
+           */
+          public function currentInArray(): array;
+      
+          /**
+           * Get all
+           *
+           * @return array
+           */
+          public function all(): array;
+      
+          /**
+           * Get Others
+           *
+           * @return array
+           *
+           */
+          public function others(): array;
+      
+          /**
+           *  Fill All Array and return an instance
+           *
+           * @return MethodsInterface
+           */
+          public function getAll(): MethodsInterface;
+      
+          /**
+           * @param string $id
+           * @return array|null
+           */
+          public function getById(string $id): ?array;
+      
+          /**
+           * @param string $id
+           * @return array|null
+           */
+          public function getBySrc(string $id): ?array;
+      
+          /**
+           * set to profile
+           *
+           * @param string $src
+           * @return string|null
+           */
+          public function set(string $src): string;
+      
+          /**
+           * Set Random image
+           *
+           * @return string
+           */
+          public function setRandom(): string;
+      
+          /**
+           * Set by an id
+           *
+           * @param string $id
+           * @return mixed
+           */
+          public function setById(string $id): ?string;
+      
+          /**
+           * @param string $id
+           * @return bool
+           */
+          public function remove(string $id): bool;
+      
+          /**
+           * @return bool
+           */
+          public function removeAll(): bool;
+      
+          /**
+           * @param string $id
+           * @param null|string $field
+           * @param $value
+           * @return bool
+           */
+          public function change(string $id, ?string $field= null , $value) : bool;
+      }
          ```
          
     - ## Add a Custom Manager 
@@ -370,3 +417,15 @@
     
     }
     ``` 
+    Then add it to UserImagesManager trait or create a new Trait and use it inside your profile model
+    ```php
+       /**
+         * @return Manager
+         * @throws NotAUserProfileModel
+         */
+        public function myCustomManager() : Manager
+        {
+            $instance = new myCustomManager();
+            return $instance->setProfile($this);
+        }
+    ```

@@ -1,9 +1,7 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: oza
- * Date: 29/04/18
- * Time: 14:30
+ * @author Aboubacar Ouattara <abouba181@gmail.com>
+ * @license MIT
  */
 
 namespace Oza\UserImagesManager\Tests;
@@ -98,4 +96,24 @@ class MethodsTest extends \Tests\TestCase
         $this->assertArrayNotHasKey('current', $this->methods->all());
         $this->assertArrayNotHasKey('others', $this->methods->all());
     }
-}
+    public function testChange () {
+        $src = $this->methods->setRandom();
+        $id = $this->methods->getBySrc($src)['id'];
+        $this->methods->change($id, "http://lorempicsum.com/random/100");
+        $data = $this->methods->getById($id);
+        $this->assertNotNull($data);
+        $this->assertNotEmpty($data);
+        $this->assertArrayHasKey('src', $data);
+        $this->assertEquals("http://lorempicsum.com/random/100", $data['src']);
+    }
+    public function testChangeSpecificField() {
+        $src = $this->methods->setRandom();
+        $id = $this->methods->getBySrc($src)['id'];
+        $this->methods->change($id,  now()->addDay(2)->format('Y-m-d'),'set_at');
+        $data = $this->methods->getById($id);
+        $this->assertNotNull($data);
+        $this->assertNotEmpty($data);
+        $this->assertArrayHasKey('set_at', $data);
+        $this->assertEquals(now()->addDay(2)->format('Y-m-d'), $data['src']);
+    }
+ }

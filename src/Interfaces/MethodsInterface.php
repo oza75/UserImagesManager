@@ -1,9 +1,7 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: oza
- * Date: 29/04/18
- * Time: 09:59
+ * @author Aboubacar Ouattara <abouba181@gmail.com>
+ * @license MIT
  */
 
 namespace Oza\UserImagesManager\Interfaces;
@@ -16,7 +14,7 @@ interface MethodsInterface
      *
      * @return mixed
      */
-    public function current() : string;
+    public function current(): string;
 
     /**
      * @return array
@@ -46,6 +44,18 @@ interface MethodsInterface
     public function getAll(): MethodsInterface;
 
     /**
+     * @param string $id
+     * @return array|null
+     */
+    public function getById(string $id): ?array;
+
+    /**
+     * @param string $id
+     * @return array|null
+     */
+    public function getBySrc(string $id): ?array;
+
+    /**
      * set to profile
      *
      * @param string $src
@@ -58,7 +68,8 @@ interface MethodsInterface
      *
      * @return string
      */
-    public function setRandom() : string;
+    public function setRandom(): string;
+
     /**
      * Set by an id
      *
@@ -71,10 +82,18 @@ interface MethodsInterface
      * @param string $id
      * @return bool
      */
-    public function remove(string $id) : bool;
+    public function remove(string $id): bool;
 
     /**
      * @return bool
      */
-    public function removeAll() : bool;
+    public function removeAll(): bool;
+
+    /**
+     * @param string $id
+     * @param null|string $field
+     * @param $value
+     * @return bool
+     */
+    public function change(string $id,  $value,?string $field= null) : bool;
 }

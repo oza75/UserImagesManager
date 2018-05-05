@@ -1,14 +1,14 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: oza
- * Date: 29/04/18
- * Time: 09:45
+ * @author Aboubacar Ouattara <abouba181@gmail.com>
+ * @license MIT
  */
 
 namespace Oza\UserImagesManager\Traits;
 
 
+use Oza\UserImagesManager\Exceptions\InvalidIdForManager;
+use Oza\UserImagesManager\Exceptions\InvalidValue;
 use Oza\UserImagesManager\Interfaces\MethodsInterface;
 
 trait Methods
@@ -45,6 +45,26 @@ trait Methods
         $data = !is_null($data) && !empty($data) ? $data : [];
         $this->all = $data;
         return $this;
+    }
+
+    /**
+     * @param string $id
+     * @return array|null
+     */
+    public function getById(string $id): ?array
+    {
+        $this->getAll();
+        return $this->fetchByField('id', $id);
+    }
+
+    /**
+     * @param string $src
+     * @return array|null
+     */
+    public function getBySrc(string $src): ?array
+    {
+        $this->getAll();
+        return $this->fetchByField('src', $src);
     }
 
     /**
@@ -142,5 +162,42 @@ trait Methods
         $this->all = null;
         $this->pushToDb();
         return true;
+    }
+
+    /**
+     * @param string $id
+     * @param null|string $field
+     * @param $value
+     * @return bool
+     * @throws InvalidIdForManager
+     * @throws InvalidValue
+     */
+    public function change(string $id,$value, ?string $field = null): bool
+    {
+        $data = $this->getById($id);
+
+        if (!$data) throw new InvalidIdForManager("Can't find a record that has $id as id");
+        if (is_null($field)) {
+            if (is_string($value)) $data['src'] = $value;
+            elseif (is_array($value)) $data = $value;
+            else throw new InvalidValue("The value must have a string type or array type when you do not specify a field");
+        }
+
+        $data[$field] = $value;
+
+        if (((array)$this->all['current'])['id'] === $id) {
+            $this->all['current'] = $data;
+            $this->pushToDb();
+            return true;
+        }
+
+        foreach ($this->all['others'] as $key => $item) {
+            if (((array)$this->all['others'][$key])["id"] === $id) {
+                $this->all['others'][$key] = $data;
+                $this->pushToDb();
+                return true;
+            }
+        }
+        return false;
     }
 }

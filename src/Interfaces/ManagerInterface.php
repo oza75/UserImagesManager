@@ -1,9 +1,7 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: aboubacar
- * Date: 18/04/18
- * Time: 19:34
+ * @author Aboubacar Ouattara <abouba181@gmail.com>
+ * @license MIT
  */
 
 namespace Oza\UserImagesManager\Interfaces;
@@ -68,6 +66,15 @@ interface ManagerInterface
      * @return bool
      */
     public function inArray(array $array, string $needed, string $field): bool;
+
+    /**
+     * Retrieve an Item from collection `All`
+     *
+     * @param string $field
+     * @param $needed
+     * @return array|null
+     */
+    public function fetchByField(string $field, $needed) : ?array;
 
     /**
      * Push an item into an array

@@ -1,9 +1,7 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: oza
- * Date: 28/04/18
- * Time: 08:09
+ * @author Aboubacar Ouattara <abouba181@gmail.com>
+ * @license MIT
  */
 
 namespace Oza\UserImagesManager;
