@@ -162,11 +162,13 @@ class Manager implements ManagerInterface
     }
 
     /**
+     * @param bool $strict
      * @return array
      */
-    public function others(): array
+    public function others(bool $strict = false): array
     {
         $others = $this->all['others'] ?? [];
+        if($strict === false) return $others;
 
         if (empty($others)) return $others;
         $current = (array)$this->all['current'];

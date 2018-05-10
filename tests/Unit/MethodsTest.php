@@ -44,9 +44,9 @@ class MethodsTest extends \Tests\TestCase
     {
         $img = "http://lorempicsum.com/random/100";
         $this->methods->set($img);
-        $this->assertEquals(0, count($this->methods->others()));
+        $this->assertEquals(0, count($this->methods->others(true)));
         $this->methods->setRandom();
-        $this->assertEquals(1, count($this->methods->others()));
+        $this->assertEquals(1, count($this->methods->others(true)));
     }
 
     public function testStructure()
@@ -68,11 +68,21 @@ class MethodsTest extends \Tests\TestCase
         $img = "http://lorempicsum.com/random/100";
         $this->methods->set($img);
         $this->assertCount(0, (array)$this->methods->all()['others']);
-        $this->assertCount(0, (array)$this->methods->others());
+        $this->assertCount(0, (array)$this->methods->others(true));
+        $img3 = $img;
         $img = $img."2";
         $this->methods->set($img);
         $this->assertCount(1, (array)$this->methods->all()['others']);
+        $this->assertCount(1, (array)$this->methods->others(true));
         $this->assertCount(1, (array)$this->methods->others());
+        $this->methods->set($img3);
+        $this->assertCount(2, (array)$this->methods->all()['others']);
+        $this->assertCount(1, (array)$this->methods->others(true));
+        $this->assertCount(2, (array)$this->methods->others());
+        $this->methods->set($img);
+        $this->assertCount(2, (array)$this->methods->all()['others']);
+        $this->assertCount(1, (array)$this->methods->others(true));
+        $this->assertCount(2, (array)$this->methods->others());
     }
     public function testRemove() {
         $img = "http://lorempicsum.com/random/100";
@@ -81,9 +91,9 @@ class MethodsTest extends \Tests\TestCase
         $id = $this->methods->all()['current']->id;
         $img = $this->methods->set($img . "1");
         $this->methods->remove($id);
-        $this->assertCount(1, $this->methods->others());
+        $this->assertCount(1, $this->methods->others(true));
         $this->assertEquals($img, $this->methods->current());
-        $arr = array_filter($this->methods->others(), function ($item) use($id) {
+        $arr = array_filter($this->methods->others(true), function ($item) use($id) {
            return $item->id === $id;
         });
         $this->assertEmpty($arr);
@@ -114,6 +124,6 @@ class MethodsTest extends \Tests\TestCase
         $this->assertNotNull($data);
         $this->assertNotEmpty($data);
         $this->assertArrayHasKey('set_at', $data);
-        $this->assertEquals(now()->addDay(2)->format('Y-m-d'), $data['src']);
+        $this->assertEquals(now()->addDay(2)->format('Y-m-d'), $data['set_at']);
     }
  }

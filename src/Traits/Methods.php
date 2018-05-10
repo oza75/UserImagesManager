@@ -80,12 +80,13 @@ trait Methods
     /**
      * Get others
      *
+     * @param bool $strict
      * @return array
      */
-    public function others(): array
+    public function others(bool $strict = false): array
     {
         if (empty($this->all)) $this->getAll();
-        return parent::others();
+        return parent::others($strict);
     }
 
     /**
@@ -100,7 +101,6 @@ trait Methods
         if (empty($data)) $this->all = $data = $this->getDefaultImageArray($src);
         else if ($this->AlreadyUsed($src)) $this->setById($this->findIdBySrc($src));
         else $this->all = $data = $this->changeCurrent($data, $this->newItem($src));
-
         $this->pushToDb();
         return $this->current();
     }
@@ -140,7 +140,8 @@ trait Methods
     {
         $item = (array)array_first((array)$this->findInArray($this->others(), $id, 'id'));
         if (!empty($item)) {
-            $this->all['current'] = $item;
+            $this->all['others'] = $this->pushInArray($this->all['others'], (array)$this->all['current']);
+            $this->all = $this->changeCurrent($this->all, $item);
             return $this->current();
         }
         return null;
@@ -172,7 +173,7 @@ trait Methods
      * @throws InvalidIdForManager
      * @throws InvalidValue
      */
-    public function change(string $id,$value, ?string $field = null): bool
+    public function change(string $id, $value, ?string $field = null): bool
     {
         $data = $this->getById($id);
 
